@@ -13,6 +13,42 @@ SPEC.loader.exec_module(MODULE)
 
 
 class RuntimeWorkflowTargetsTests(unittest.TestCase):
+    def test_blacksmith_runners_preserve_platforms_and_size_jobs_individually(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/verify-reference.yml").read_text()
+        jobs = dict(re.findall(r"^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)",
+                               workflow.split("\njobs:\n", 1)[1], re.M | re.S))
+        expected = {
+            "reference-checks": "blacksmith-6vcpu-macos-15",
+            "runtime-checks": "blacksmith-4vcpu-ubuntu-2404",
+            "runtime-build": "blacksmith-4vcpu-ubuntu-2404",
+            "reconstruct-and-build": "blacksmith-2vcpu-ubuntu-2404",
+        }
+        self.assertEqual(set(expected), set(jobs))
+        for job, runner in expected.items():
+            with self.subTest(job=job):
+                self.assertEqual([runner], re.findall(r"^    runs-on: (.+)$", jobs[job], re.M))
+
+    def test_runner_migration_keeps_read_only_checkout_and_browser_sandbox(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/verify-reference.yml").read_text()
+        self.assertIn("\npermissions:\n  contents: read\n", workflow)
+        self.assertEqual(3, workflow.count("persist-credentials: false"))
+        self.assertIn("chromiumSandbox: true", workflow)
+        self.assertIn('test "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)" = "$userns_restriction_before"', workflow)
+        self.assertIn('test ! -e "$browser_profile"', workflow)
+        self.assertNotIn("--no-sandbox", workflow)
+        self.assertNotIn("continue-on-error:", workflow)
+
+    def test_aggregate_gate_requires_all_three_qualification_jobs(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/verify-reference.yml").read_text()
+        gate = workflow.split("\n  reconstruct-and-build:\n", 1)[1]
+        self.assertIn("needs: [reference-checks, runtime-checks, runtime-build]", gate)
+        self.assertIn("if: always()", gate)
+        for variable, job in [("REFERENCE_RESULT", "reference-checks"),
+                              ("NATIVE_RESULT", "runtime-checks"),
+                              ("BUILD_RESULT", "runtime-build")]:
+            self.assertIn(variable + ": ${{ needs." + job + ".result }}", gate)
+            self.assertIn(f'test "${variable}" = success', gate)
+
     def test_admits_only_native_step_paths_and_keeps_runtime_config_targets(self):
         workflow = '''
       - name: Public preparation

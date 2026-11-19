@@ -24,7 +24,8 @@ permissions:
 
 jobs:
   reference-checks:
-    runs-on: macos-15
+    # Smallest Blacksmith macOS 15 runner; retains the ARM64 fixture host.
+    runs-on: blacksmith-6vcpu-macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -80,7 +81,8 @@ jobs:
         run: git diff --check HEAD^ HEAD
 
   runtime-checks:
-    runs-on: ubuntu-24.04
+    # Retain Ubuntu 24.04 x64 and 16 GB for native type/lint checkers.
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -147,7 +149,8 @@ jobs:
           retention-days: 7
 
   runtime-build:
-    runs-on: ubuntu-24.04
+    # Retain Ubuntu 24.04 x64 and 16 GB for the build and browser suites.
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -190,20 +193,31 @@ jobs:
             echo 'Managed Chromium path must be absolute and contain no policy metacharacters' >&2
             exit 1
           fi
-          sysctl kernel.apparmor_restrict_unprivileged_userns
-          userns_restriction_before="$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)"
-          browser_profile=/etc/apparmor.d/openclaw-reference-chromium
-          test ! -e "$browser_profile"
-          sudo tee "$browser_profile" <<EOF
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sysctl kernel.apparmor_restrict_unprivileged_userns
+            userns_restriction_before="$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)"
+            browser_profile=/etc/apparmor.d/openclaw-reference-chromium
+            test ! -e "$browser_profile"
+            sudo tee "$browser_profile" <<EOF
           abi <abi/4.0>,
           include <tunables/global>
           profile openclaw-reference-chromium "$playwright_chromium" flags=(unconfined) {
             userns,
           }
           EOF
-          sudo apparmor_parser -r "$browser_profile"
-          sysctl kernel.apparmor_restrict_unprivileged_userns
-          test "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)" = "$userns_restriction_before"
+            sudo apparmor_parser -r "$browser_profile"
+            sysctl kernel.apparmor_restrict_unprivileged_userns
+            test "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)" = "$userns_restriction_before"
+          else
+            # Some microVM kernels do not enable AppArmor. Prove that case
+            # from kernel interfaces rather than swallowing a failed sysctl.
+            test "$(stat -f -c %T /sys)" = sysfs
+            test -d /sys/module
+            if [ -d /sys/module/apparmor ]; then
+              test "$(cat /sys/module/apparmor/parameters/enabled)" = N
+            fi
+            echo 'Kernel does not enable AppArmor; Chromium sandbox startup remains required.'
+          fi
       - name: Verify managed Chromium startup
         timeout-minutes: 1
         working-directory: ${{ runner.temp }}/openclaw-reference
@@ -1088,7 +1102,8 @@ jobs:
   reconstruct-and-build:
     needs: [reference-checks, runtime-checks, runtime-build]
     if: always()
-    runs-on: ubuntu-24.04
+    # This job only checks the three qualification results.
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Require every qualification job to succeed
         env:

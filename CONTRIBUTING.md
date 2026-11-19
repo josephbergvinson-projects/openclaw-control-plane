@@ -94,7 +94,19 @@ an installed runtime or qualify another host's accounts and user workflows.
 and reconstructs and builds the pinned runtime in a separate Ubuntu checkout.
 It accepts manual dispatch and runs on pull requests, main, and reference rebuild
 branches. Review the workflow's permissions, runner requirements and your account's
-Actions settings before enabling it on a fork. See
+Actions settings before enabling it on a fork. The workflow uses
+[Blacksmith runners](https://docs.blacksmith.sh/blacksmith-runners/overview);
+the Blacksmith GitHub App must have access to every repository using these labels.
+The macOS fixture job uses the smallest macOS 15 ARM64 runner (6 vCPU, 24 GB).
+The native checks and build retain Ubuntu 24.04 x64 with 4 vCPU and 16 GB, avoiding
+a memory reduction for the type/lint checkers, build and browser suites. The
+result-only aggregate gate uses 2 vCPU and 8 GB. Runner selection does not alter
+the check plan, credential permissions or Chromium sandbox policy. The browser
+setup loads its narrow AppArmor profile when the kernel exposes Ubuntu's user
+namespace restriction, then verifies the global value is unchanged. Kernels
+without that interface must prove AppArmor is absent or disabled through sysfs;
+an enabled or unknown AppArmor state fails closed. Sandboxed Chromium startup is
+required on either path before the build and browser suites. See also
 [GitHub's runner documentation](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
 The native plan adapter changes only full-lint shard selection and preserves every
 other command, including checks after lint. Its tests use fake command execution.
