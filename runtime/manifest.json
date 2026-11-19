@@ -47,7 +47,7 @@
       "file": "codex-darwin-arm64-0.160.0-openclaw.catalog.20261018.2.tgz",
       "sha256": "80e6f41a5ee5e923c71ae3c9fd86d0865a50527c19d098246d0bb7d6f2b6bb42",
       "sha512": "66264c08b58e281fb7d4c56a982c8b18dff0e349e319715ca2762489cccd05c8cc5633269405507ff4f5b791576caeeabf562f799a6a1947aa35e9638eae34d0",
-      "url": "https://github.com/josephbergvinson/openclaw-control-plane/releases/download/native-codex160-catalog-20261018.2/codex-darwin-arm64-0.160.0-openclaw.catalog.20261018.2.tgz"
+      "url": "https://github.com/josephbergvinson-projects/openclaw-control-plane/releases/download/native-codex160-catalog-20261018.2/codex-darwin-arm64-0.160.0-openclaw.catalog.20261018.2.tgz"
     },
     "provenanceFile": "native160/native160-provenance.json"
   },

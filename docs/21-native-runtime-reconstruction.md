@@ -149,6 +149,27 @@ If an apply or later archive operation fails, the isolated checkout may contain 
 
 The notice packet records a finite set of selected resources and notices. It does not claim a complete static dependency license inventory or a bit-for-bit rebuild of the native executables.
 
+## October 2026 native releases
+
+The repository moved to [josephbergvinson-projects/openclaw-control-plane](https://github.com/josephbergvinson-projects/openclaw-control-plane). The two October 18 installers reject GitHub’s redirect from the previous owner. Both releases still provide their original archive and source notices. The release name identifies the archive published that day. The runtime manifest in its tag identifies the archive selected for installation at that commit.
+
+| Release | Published archive | What the tag’s runtime manifest selects |
+| --- | --- | --- |
+| [`native-codex154-catalog-20261018.1`](https://github.com/josephbergvinson-projects/openclaw-control-plane/releases/tag/native-codex154-catalog-20261018.1) | Codex 0.154.0, October 18 | The retired October 8 archive. GitHub no longer serves the bytes needed to reconstruct this tag’s exact native runtime. |
+| [`native-codex160-catalog-20261018.2`](https://github.com/josephbergvinson-projects/openclaw-control-plane/releases/tag/native-codex160-catalog-20261018.2) | Codex 0.160.0, October 18 | The October 18 Codex 0.154.0 archive. Its URL in the frozen manifest works with the newer downloader. |
+
+To reconstruct the second tag, run the following in a control-plane clone that contains commit `0247b8f`. Supply a clean upstream clone at the commit pinned in the tag’s manifest. The temporary directory pairs the original manifest and patches with the transfer-aware downloader.
+
+```sh
+reference=$(mktemp -d)
+mkdir "$reference/scripts"
+git archive native-codex160-catalog-20261018.2 runtime | tar -x -C "$reference"
+git show 0247b8fa3c1f686a44c73d7a6bdc1f0aff79674d:scripts/reconstruct_runtime.py > "$reference/scripts/reconstruct_runtime.py"
+python3 "$reference/scripts/reconstruct_runtime.py" /path/to/clean-upstream-clone --apply --native-distribution
+```
+
+For the published 0.160.0 dependency itself, use the release download or [provision a checkout with the matching dependency lock](#provision-an-explicitly-unselected-candidate-dependency). Both tags still support source-only reconstruction.
+
 ## Provision an explicitly unselected candidate dependency
 
 The same archive owner can provision a reviewed candidate packet before that

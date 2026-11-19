@@ -299,7 +299,7 @@ in the manifest; it cannot hide a production difference. Current source and
 optional native distribution trees are separately bound and checked.
 
 Use the public [reconstruction procedure](../runtime/README.md), then inspect
-[hosted checks](https://github.com/josephbergvinson/openclaw-control-plane/actions)
+[hosted checks](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions)
 for the exact commit. Source equality, tests, build, activation and user-visible
 behavior establish different claims. An adopter supplies their own model,
 accounts, device permissions, schedules and acceptance checks.
