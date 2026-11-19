@@ -193,20 +193,31 @@ jobs:
             echo 'Managed Chromium path must be absolute and contain no policy metacharacters' >&2
             exit 1
           fi
-          sysctl kernel.apparmor_restrict_unprivileged_userns
-          userns_restriction_before="$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)"
-          browser_profile=/etc/apparmor.d/openclaw-reference-chromium
-          test ! -e "$browser_profile"
-          sudo tee "$browser_profile" <<EOF
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sysctl kernel.apparmor_restrict_unprivileged_userns
+            userns_restriction_before="$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)"
+            browser_profile=/etc/apparmor.d/openclaw-reference-chromium
+            test ! -e "$browser_profile"
+            sudo tee "$browser_profile" <<EOF
           abi <abi/4.0>,
           include <tunables/global>
           profile openclaw-reference-chromium "$playwright_chromium" flags=(unconfined) {
             userns,
           }
           EOF
-          sudo apparmor_parser -r "$browser_profile"
-          sysctl kernel.apparmor_restrict_unprivileged_userns
-          test "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)" = "$userns_restriction_before"
+            sudo apparmor_parser -r "$browser_profile"
+            sysctl kernel.apparmor_restrict_unprivileged_userns
+            test "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns)" = "$userns_restriction_before"
+          else
+            # Some microVM kernels do not enable AppArmor. Prove that case
+            # from kernel interfaces rather than swallowing a failed sysctl.
+            test "$(stat -f -c %T /sys)" = sysfs
+            test -d /sys/module
+            if [ -d /sys/module/apparmor ]; then
+              test "$(cat /sys/module/apparmor/parameters/enabled)" = N
+            fi
+            echo 'Kernel does not enable AppArmor; Chromium sandbox startup remains required.'
+          fi
       - name: Verify managed Chromium startup
         timeout-minutes: 1
         working-directory: ${{ runner.temp }}/openclaw-reference
