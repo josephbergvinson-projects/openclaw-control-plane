@@ -53,6 +53,7 @@ The [manifest](runtime/manifest.json) pins source, patches, toolchain and native
 artifacts. The optional Mac companion has its own source target; its local Bun
 security payload is outside this reconstruction package. See
 [source identities](runtime/README.md#source-identities) for the exact boundaries.
+For the October 2026 native releases, see the [download and reconstruction notes](docs/21-native-runtime-reconstruction.md#october-2026-native-releases).
 
 Company Alpha, Company Beta and the Personal Data Project are fictional. Example
 readiness records start unverified. Enrollment and a real workflow check complete
@@ -77,7 +78,7 @@ node --test tests/native-reference-checks.test.mjs
 
 [CONTRIBUTING](CONTRIBUTING.md) covers workspace fixtures, runtime checks,
 confidentiality review and publication. The
-[reference workflow](https://github.com/josephbergvinson/openclaw-control-plane/actions/workflows/verify-reference.yml)
+[reference workflow](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions/workflows/verify-reference.yml)
 reconstructs and builds the pinned runtime. Use the checks attached to the commit
 you adopt, then verify your installation through an ordinary task.
 

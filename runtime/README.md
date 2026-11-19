@@ -301,7 +301,7 @@ byte-identical rebuild of every native executable. Continue with the
 
 ## Hosted qualification
 
-The [reference workflow](https://github.com/josephbergvinson/openclaw-control-plane/actions/workflows/verify-reference.yml)
+The [reference workflow](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions/workflows/verify-reference.yml)
 uses a fresh official-tag checkout and the same manifest bindings. Independent
 repository, native-check and build jobs feed `reconstruct-and-build`. Its native
 plan adapter only adds bounded full-lint shard selection; it preserves the other
@@ -323,7 +323,7 @@ their separate scope.
 
 Browser qualification uses the pinned Playwright-managed Chromium and verifies
 sandbox-enabled startup before the browser cases. On the hosted Ubuntu runner,
-the [workflow](https://github.com/josephbergvinson/openclaw-control-plane/blob/main/.github/workflows/verify-reference.yml) admits user namespaces
+the [workflow](https://github.com/josephbergvinson-projects/openclaw-control-plane/blob/main/.github/workflows/verify-reference.yml) admits user namespaces
 for that exact executable through an AppArmor profile while retaining the global
 restriction. This is a CI prerequisite, not a production host setting or a reason
 to disable the browser sandbox when a test cannot launch.

@@ -16,15 +16,15 @@ later source tree or a new host.
 
 ## Source history and qualification
 
-Public [commits](https://github.com/josephbergvinson/openclaw-control-plane/commits/main/)
-identify published changes. [Workflow runs](https://github.com/josephbergvinson/openclaw-control-plane/actions)
+Public [commits](https://github.com/josephbergvinson-projects/openclaw-control-plane/commits/main/)
+identify published changes. [Workflow runs](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions)
 retain checks for each public revision. A passing result belongs to its exact
 commit and inputs; editing prose cannot transfer it to a successor.
 
 Earlier queue-steering investigation used a disposable candidate overlay and
 an isolated ten-case fixture. The
-[historical package](https://github.com/josephbergvinson/openclaw-control-plane/commits/main/runtime/diagnostics/adopted-steering)
-and its [workflow history](https://github.com/josephbergvinson/openclaw-control-plane/actions/workflows/steering-regression.yml)
+[historical package](https://github.com/josephbergvinson-projects/openclaw-control-plane/commits/main/runtime/diagnostics/adopted-steering)
+and its [workflow history](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions/workflows/steering-regression.yml)
 remain in version history. Their results belong to the source generation tested
 at that time. They are not extra installation steps or current-runtime proof.
 

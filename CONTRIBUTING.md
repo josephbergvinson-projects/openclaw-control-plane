@@ -90,7 +90,7 @@ After merging, inspect all required hosted checks on the exact final head and re
 back the public source/asset bindings. Source publication does not itself change
 an installed runtime or qualify another host's accounts and user workflows.
 
-[GitHub Actions](https://github.com/josephbergvinson/openclaw-control-plane/actions/workflows/verify-reference.yml) runs the repository checks
+[GitHub Actions](https://github.com/josephbergvinson-projects/openclaw-control-plane/actions/workflows/verify-reference.yml) runs the repository checks
 and reconstructs and builds the pinned runtime in a separate Ubuntu checkout.
 It accepts manual dispatch and runs on pull requests, main, and reference rebuild
 branches. Review the workflow's permissions, runner requirements and your account's

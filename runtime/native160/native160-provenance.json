@@ -10,7 +10,7 @@
     "bytes": 143357229,
     "sha256": "80e6f41a5ee5e923c71ae3c9fd86d0865a50527c19d098246d0bb7d6f2b6bb42",
     "integrity": "sha512-ZiZMCLWOKB+31MVqmCyLGN/w40njGXFconYkiczNBcjMVjMmlAVQf/T1t5FXbK7qv1YveZpqGUeqNeljjq400A==",
-    "publicAssetURL": "https://github.com/josephbergvinson/openclaw-control-plane/releases/download/native-codex160-catalog-20261018.2/codex-darwin-arm64-0.160.0-openclaw.catalog.20261018.2.tgz",
+    "publicAssetURL": "https://github.com/josephbergvinson-projects/openclaw-control-plane/releases/download/native-codex160-catalog-20261018.2/codex-darwin-arm64-0.160.0-openclaw.catalog.20261018.2.tgz",
     "members": [
       {
         "path": "package/vendor/aarch64-apple-darwin/bin/codex",
