@@ -12,8 +12,11 @@ import sys
 import tempfile
 import unittest
 from dataclasses import replace
+from email.message import Message
 from pathlib import Path
 from unittest.mock import Mock, patch
+from urllib.request import HTTPSHandler, Request
+from urllib.response import addinfourl
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("reconstruct_runtime", ROOT / "scripts/reconstruct_runtime.py")
@@ -83,6 +86,59 @@ class RuntimeReconstructionTests(unittest.TestCase):
             self.package.normalized_tree, tree, hashlib.sha256(raw).hexdigest(), raw, artifact,
         )
         return replace(self.package, native=native), contents
+
+    def test_native_release_download_before_and_after_owner_transfer(self) -> None:
+        artifact, contents = self.native_artifact()
+        old = artifact.url
+        new = old.replace("/josephbergvinson/", "/josephbergvinson-projects/")
+        asset = "https://release-assets.githubusercontent.com/fixture?signature=fixture"
+        for index, chain in enumerate(((old, asset), (old, new, asset), (new, asset))):
+            with self.subTest(chain=chain):
+                requested = []
+
+                def respond(request):
+                    requested.append(request.full_url)
+                    i = len(requested) - 1
+                    self.assertEqual(chain[i], request.full_url)
+                    headers = Message()
+                    status = 200
+                    if i + 1 < len(chain):
+                        headers["Location"] = chain[i + 1]
+                        status = 301 if chain[i + 1] == new else 302
+                    response = addinfourl(io.BytesIO(contents if status == 200 else b""),
+                                          headers, request.full_url, status)
+                    response.msg = "fixture"
+                    return response
+
+                checkout = self.checkout / str(index)
+                checkout.mkdir()
+                with patch.object(HTTPSHandler, "https_open", side_effect=respond):
+                    result = RUNTIME.provision_native_artifact(checkout, replace(artifact, url=chain[0]))
+                self.assertEqual(list(chain), requested)
+                self.assertEqual("downloaded", result["source"])
+                self.assertEqual(contents, (checkout / result["path"]).read_bytes())
+
+    def test_native_release_redirect_is_bound_to_the_declared_transfer(self) -> None:
+        artifact, _ = self.native_artifact()
+        old = artifact.url
+        new = old.replace("/josephbergvinson/", "/josephbergvinson-projects/")
+        redirects = RUNTIME.PublicAssetRedirects(old)
+        for origin, target, code in (
+            (old, new.replace("https:", "http:"), 301),
+            (old, new.replace("github.com/", "github.com.example.invalid/"), 301),
+            (old, new.replace("github.com/", "josephbergvinson@github.com/"), 301),
+            (old, new.replace("-projects/", "-projects-extra/"), 301),
+            (old, new.replace("control-plane/", "control-plane-extra/"), 301),
+            (old, new.replace("/fixture/", "/different/"), 301),
+            (old, new.replace(artifact.file, "different.tgz"), 301),
+            (old, new + "?query=1", 301), (old, new + "#fragment", 301),
+            (old, new, 302), (new, old, 301), (new, new, 301),
+            (old.replace("/fixture/", "/different/"), new.replace("/fixture/", "/different/"), 301),
+            ("https://release-assets.githubusercontent.com/fixture", new, 301),
+        ):
+            with self.subTest(origin=origin, target=target, code=code):
+                with self.assertRaises(RUNTIME.ReconstructionError):
+                    redirects.redirect_request(Request(origin), None, code, "fixture", {}, target)
 
     def companion_package(self, extra_paths=(), *, restore_native_dependencies=False):
         package, contents = self.native_package()
@@ -928,7 +984,7 @@ class RuntimeReconstructionTests(unittest.TestCase):
             RUNTIME.load_package(directory, native_distribution=True)
         for url in (
             "https://github.com/other/repository/releases/download/fixture/" + package.native.artifact.file,
-            package.native.artifact.url + "?token=example", "http://github.com" + RUNTIME.PUBLIC_RELEASE_PATH + "fixture/" + package.native.artifact.file,
+            package.native.artifact.url + "?token=example", package.native.artifact.url.replace("https:", "http:"),
         ):
             with self.subTest(url=url):
                 with self.assertRaises(RUNTIME.ReconstructionError):

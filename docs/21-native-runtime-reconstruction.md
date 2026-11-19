@@ -131,7 +131,7 @@ loaded-process verification and real-interface acceptance.
 | `patch.file` | Regular `.patch` file directly inside `runtime/`. |
 | `patch.bytes`, `patch.sha256` | Exact byte count and lowercase SHA-256 of the source-to-distribution patch. |
 | `artifact.file` | Exact archive basename used under `native-package-artifacts/`, ending in `.tgz` or `.tar.gz`. |
-| `artifact.url` | Actual HTTPS release download URL in `josephbergvinson/openclaw-control-plane`, with the same archive basename. |
+| `artifact.url` | Exact HTTPS release download URL for `openclaw-control-plane` under `josephbergvinson` or `josephbergvinson-projects`, with the same archive basename. |
 | `artifact.bytes` | Exact positive byte count. |
 | `artifact.sha256`, `artifact.sha512` | Lowercase hexadecimal digests of the unchanged archive bytes. |
 
@@ -141,7 +141,7 @@ Native mode refuses incomplete bindings, source mismatches, unexpected delta pat
 
 ## Archive provisioning
 
-The helper requests only the declared public GitHub release URL and accepts its normal HTTPS redirect to GitHub's release asset host. It inherits no proxy credentials, authentication handlers, or cookies. It streams into an owned temporary file, checks exact size and both digests, keeps the verified descriptor through publication, and verifies the exposed regular file before reporting success.
+The helper starts at the release URL in the manifest and follows the HTTPS redirect to GitHub's release asset host. For a manifest under `josephbergvinson`, it also accepts GitHub's HTTP 301 to the same repository, tag and archive under `josephbergvinson-projects`. It inherits no proxy credentials, authentication handlers, or cookies. It streams into an owned temporary file, checks exact size and both digests, keeps the verified descriptor through publication, and verifies the exposed regular file before reporting success.
 
 Publication creates the exact `native-package-artifacts/<artifact.file>` entry without replacing an existing destination. Matching existing bytes are verified; differing files, symlinks, and changed namespace entries are retained and reported. The original clean-checkout requirement still applies. Temporary cleanup removes only a matching owned file and preserves the original failure if cleanup also fails.
 

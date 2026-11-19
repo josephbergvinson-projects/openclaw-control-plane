@@ -26,7 +26,8 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLIC_RELEASE_PATH = "/josephbergvinson/openclaw-control-plane/releases/download/"
+PUBLIC_RELEASE_URL = "https://github.com/josephbergvinson/openclaw-control-plane/releases/download/"
+TRANSFERRED_RELEASE_URL = "https://github.com/josephbergvinson-projects/openclaw-control-plane/releases/download/"
 NATIVE_DELTA_PATHS = {"pnpm-lock.yaml", "pnpm-workspace.yaml"}
 NATIVE_COMPANION_DELTA_PATHS = {
     "apps/macos/Sources/OpenClaw/NativeCredentialPromptContext.swift",
@@ -137,15 +138,11 @@ def validate_release_url(url: str, filename: str) -> None:
         raise ReconstructionError("Native archive must name one regular archive filename")
     if not isinstance(url, str):
         raise ReconstructionError("Native archive requires a bound public release URL")
-    parsed = urlsplit(url)
-    prefix = PUBLIC_RELEASE_PATH
-    if (
-        parsed.scheme != "https" or parsed.netloc != "github.com"
-        or parsed.query or parsed.fragment or not parsed.path.startswith(prefix)
-    ):
+    tag_url, _, archive = url.rpartition("/")
+    root, _, tag = tag_url.rpartition("/")
+    if root + "/" not in (PUBLIC_RELEASE_URL, TRANSFERRED_RELEASE_URL):
         raise ReconstructionError("Native archive must use this repository's public GitHub release URL")
-    parts = parsed.path[len(prefix):].split("/")
-    if len(parts) != 2 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", parts[0]) or parts[1] != filename:
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", tag) or archive != filename:
         raise ReconstructionError("Native release URL must name the declared archive exactly")
 
 
@@ -504,7 +501,16 @@ def load_package(directory: Path, *, native_distribution: bool = False,
 
 
 class PublicAssetRedirects(HTTPRedirectHandler):
+    def __init__(self, release_url: str):
+        super().__init__()
+        self.release_url = release_url
+
     def redirect_request(self, request, response, code, message, headers, url):
+        # GitHub's permanent repository transfer keeps the release tag and archive path.
+        if (code == 301 and request.full_url == self.release_url
+                and self.release_url.startswith(PUBLIC_RELEASE_URL)
+                and url == TRANSFERRED_RELEASE_URL + self.release_url[len(PUBLIC_RELEASE_URL):]):
+            return super().redirect_request(request, response, code, message, headers, url)
         parsed = urlsplit(url)
         if parsed.scheme != "https" or parsed.netloc != "release-assets.githubusercontent.com" or parsed.fragment:
             raise ReconstructionError("Native release redirected outside GitHub's public asset host")
@@ -574,7 +580,7 @@ def provision_native_artifact(checkout: Path, artifact: NativeArtifact) -> dict:
             try:
                 with os.fdopen(fd, "wb") as output:
                     # No proxy credentials, authentication handlers, or cookies are inherited.
-                    opener = build_opener(ProxyHandler({}), PublicAssetRedirects())
+                    opener = build_opener(ProxyHandler({}), PublicAssetRedirects(artifact.url))
                     request = Request(artifact.url, headers={"Accept": "application/octet-stream"})
                     with opener.open(request, timeout=60) as response:
                         verify_archive(response, artifact, output)
