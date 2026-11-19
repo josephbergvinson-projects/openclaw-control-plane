@@ -55,6 +55,8 @@ strict live-correction timing remains unqualified.
 | The production tool interface differed from the interface used in a motivating benchmark. | Trace the actual deployed call path before changing an interface. |
 | Split-turn compaction summarized the same prefix twice. | Remove duplicated work at its existing owner before adding a new memory layer. |
 | A confirmed answer lost its delivery record when history was mirrored. | Preserve trusted effect identity through recovery; text similarity cannot establish delivery. |
+| A platform can return a message ID for a text fallback after an upload fails. | Check the platform’s file receipt for each requested attachment and confirm that it names the intended destination before reporting the upload complete. |
+| A clarification can be waiting when a worker restarts before its first external action. | Restart with the clarification queued. Verify that the first action follows the clarified request and that the clarification keeps its source message ID and stays pending until an answer addresses it. |
 | Browser guidance conflicted about reuse and profile selection. | Give the model one clear tool contract and keep tab ownership in the existing lifecycle. |
 | Some long delays contained very little tool-execution time. | Measure provider generation, preparation, queueing, compaction and tool time separately. |
 | Observer timing and prompt/oracle disagreement affected acceptance. | Qualify the measurement route first and preserve setup failures in the results. |
