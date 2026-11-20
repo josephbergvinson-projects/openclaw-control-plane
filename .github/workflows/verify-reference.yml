@@ -22,6 +22,11 @@ on:
 permissions:
   contents: read
 
+# Keep pushes, manual dispatches and deliberate reruns independent.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.run_attempt == 1 && github.event.pull_request.number || format('run-{0}', github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' && github.run_attempt == 1 }}
+
 jobs:
   reference-checks:
     # Smallest Blacksmith macOS 15 runner; retains the ARM64 fixture host.

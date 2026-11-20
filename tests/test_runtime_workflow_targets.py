@@ -13,6 +13,16 @@ SPEC.loader.exec_module(MODULE)
 
 
 class RuntimeWorkflowTargetsTests(unittest.TestCase):
+    def test_only_initial_pull_request_runs_share_a_cancellation_group(self):
+        workflow = (SCRIPT.parents[1] / ".github/workflows/verify-reference.yml").read_text()
+        group = re.search(r"^concurrency:\n((?:  .+\n)+)", workflow, re.M)
+        self.assertIsNotNone(group, "missing workflow concurrency settings")
+        self.assertEqual(group[1].splitlines(), [
+            "  group: ${{ github.workflow }}-${{ github.run_attempt == 1 && "
+            "github.event.pull_request.number || format('run-{0}', github.run_id) }}",
+            "  cancel-in-progress: ${{ github.event_name == 'pull_request' && github.run_attempt == 1 }}",
+        ])
+
     def test_blacksmith_runners_preserve_platforms_and_size_jobs_individually(self):
         workflow = (SCRIPT.parents[1] / ".github/workflows/verify-reference.yml").read_text()
         jobs = dict(re.findall(r"^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)",
