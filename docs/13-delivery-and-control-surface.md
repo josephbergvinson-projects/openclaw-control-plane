@@ -196,6 +196,11 @@ Test the actual foreground owner instead of adding a parallel warning monitor.
 A checkpoint, typing indicator or retained child is not a substitute for useful
 progress and a final answer.
 
+An interruption can occur while the gateway is still running. Check its process
+history before attributing an interruption to a restart. When the operator asks
+what happened after a Stop, use the cancellation record or the original
+conversation to explain the outcome. Work resumes when the operator requests it.
+
 ## Ambiguous delivery
 
 Inspect the provider destination, native delivery owner and retained evidence before
@@ -228,6 +233,13 @@ verify identity/context in a new session, a complete audible reply, permitted ta
 handoff and return of the result. Finish a short capture and check both sides of the
 saved transcript and its delivered minutes. Exercise relevant interruption cases
 separately; one successful call is not proof for every room, account or future run.
+
+In a disposable gateway, disconnect Discord while a task is active. Send Stop
+and then a status question in the same conversation. On reconnect, verify that
+the original task stops before the question reaches the model. Read the
+conversation back and match the Stop acknowledgment and the answer to their
+respective requests. Check the order, wording and delivery once more through the
+live interface after the repair ships.
 
 The [worked example](07-worked-example.md) demonstrates the user-facing contract;
 the [source map](20-runtime-source-changes.md) locates its runtime mechanisms.
