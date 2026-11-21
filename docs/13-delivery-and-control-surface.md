@@ -50,6 +50,11 @@ inspection vocabulary. Explain a limitation by its effect on the request.
 
 ## Discord goal commands
 
+For a long brief, attach a text file in the channel or thread where the goal
+should run. Copy the link to that message. In `/goal`, choose `start` and enter
+a short objective with the message link in the `text` field. When the agent
+asks a follow-up question, answer in the same conversation to continue the goal.
+
 A native `/goal` start or resume has two delivery stages. After the goal is saved,
 the command receives a confirmation before model work starts. That confirmation
 preserves the command's private or public visibility and explains that progress
