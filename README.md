@@ -61,12 +61,12 @@ an installation.
 
 ## Results and direction
 
-The reference includes tested improvements to compaction, usage accounting,
-browser ownership and task delivery. Its bounded comparison found similar task
-quality on most qualified pairs, while native Codex usually finished faster.
-[Results and lessons](docs/22-evaluation-and-future-work.md#measured-results)
-explain the measurements and the next experiments: simpler execution, focused
-context and fewer unnecessary model calls.
+In the frozen November comparison, the custom OpenClaw candidate and native
+Codex both earned full marks on 16 of 17 qualified pairs. On the remaining
+pair, OpenClaw scored 75 and Codex scored 100.
+Codex finished faster in 16 pairs. A separate compaction change cut the number
+of summary calls in half. The evaluation guide gives the scores, timings and
+proposed changes to the execution engine. [Results and lessons](docs/22-evaluation-and-future-work.md#measured-results)
 
 ## Verify and contribute
 

@@ -1,45 +1,38 @@
 # Evaluation and future work
 
-The control plane should help an assistant finish useful work with less
-supervision. The next gains should come from simpler execution, better use of
-context and shorter waits. This chapter separates measured results, engineering
-lessons and proposed experiments.
+The November evaluation asked whether changing the harness helped an assistant
+finish the same work more accurately or quickly. It covered tool use,
+long-context continuation and browser workflows.
 
 ## Measured results
 
-The November 2026 evaluation compared a frozen custom OpenClaw baseline, a frozen
-candidate and native Codex. It covered code/tool use, long-context continuation
-and browser workflows. All 72 planned positions have an outcome: 68 admitted runs
-reached a terminal disposition and four stopped at prerequisites before task input.
-A terminal disposition includes failures; it is not a task-success count.
+### Frozen comparison with native Codex
 
-The baseline was an earlier **custom installation**, not stock OpenClaw. Fifteen
-cases qualified for a three-way comparison. Against that baseline, the candidate
-had 13 quality ties, one win and one loss. The win concerned labels and completed
-effects; the loss concerned cleanup of an owned blank browser tab.
+The evaluator recorded all 72 positions. It admitted 68 runs and recorded their
+terminal outcomes, including failures. Four stopped before task input because
+a prerequisite was missing. Fifteen cases
+qualified for comparing all three configurations. Against the earlier custom
+OpenClaw baseline, the candidate tied on quality in 13 cases, won one by
+preserving labels and completed actions, and lost one by leaving a blank
+browser tab open.
 
-Seventeen candidate/Codex pairs qualified for a quality comparison. Sixteen scored
-100/100 for both; the remaining pair scored 75 for the candidate and 100 for Codex.
-Codex finished faster on 16 of the 17 pairs. Configuration and observation groups
-are kept separate:
+Seventeen pairs qualified for comparing the candidate with native Codex.
+Both scored 100/100 on sixteen. On the remaining pair, the candidate scored
+75 and Codex scored 100. Codex finished faster on sixteen of the seventeen.
 
-| Group | Qualified pairs | Mean task quality: candidate / Codex | Median completion time: candidate / Codex |
+| Group | Qualified pairs | Mean task quality (candidate / Codex) | Median completion time (candidate / Codex) |
 | --- | ---: | ---: | ---: |
 | Original configuration and observer | 9 | 100 / 100 | 199.5s / 122.6s |
 | Updated configuration, original observer | 1 | 100 / 100 | 76.8s / 71.2s |
 | Updated configuration and bounded observer | 7 | 96.4 / 100 | 341.1s / 153.8s |
 
-The combined acceptance target was **not met**. These are small, selected,
-task-specific samples, not general intelligence scores. Later runtime repairs
-retain their own checks; they do not change the frozen comparison. Raw traces and
-account-bearing evidence remain private. The task suite and scoring rubrics are
-not published in this repository; these are reported evaluation results, not a
-publicly rerunnable benchmark. This round did not compare stock OpenClaw
-or rerun Hermes, so it supplies no current ranking against either.
+The combined acceptance target was **unmet**. The private suite and rubrics
+support these task-specific comparisons. Stock OpenClaw and Hermes were
+outside the comparison, and subsequent deployments have their own results.
 
-Separate compaction development checks preserved required state in eight cases per
-arm. Summary calls fell from 16 to eight, summary time by 33.76% and provider tokens
-by 18.07%. Those are gains in the compaction step, not whole-task speedups.
+Separate compaction development checks preserved the required state in eight
+cases per configuration. Summary calls fell from 16 to eight. The summary step
+used 33.76% less time and 18.07% fewer provider tokens.
 
 Fresh deployed checks subsequently demonstrated browser reuse, task-tab cleanup,
 one final answer and correct incorporation of a user correction. The browser task
@@ -54,17 +47,20 @@ strict live-correction timing remains unqualified.
 | --- | --- |
 | The production tool interface differed from the interface used in a motivating benchmark. | Trace the actual deployed call path before changing an interface. |
 | Split-turn compaction summarized the same prefix twice. | Remove duplicated work at its existing owner before adding a new memory layer. |
-| A confirmed answer lost its delivery record when history was mirrored. | Preserve trusted effect identity through recovery; text similarity cannot establish delivery. |
-| Two requests in one conversation can both await a reply when a worker restarts. | Test both recovery orders. Check that each confirmed reply appears once on its original request. If one send has an unknown outcome, leave it pending while the other finishes. Retry only when the provider confirms the first attempt was unsent. |
+| A confirmed answer lost its delivery record when the system copied its conversation history. | Carry the platform message ID into the copy so recovery can verify what the recipient received. |
+| Two requests in one conversation can both await a reply when a worker restarts. | Test both recovery orders. Check that each confirmed reply appears once on its original request. Record an unconfirmed send against its original request while the other request finishes. Retry only after confirming that the first attempt was unsent. |
 | A platform can return a message ID for a text fallback after an upload fails. | Check the platform’s file receipt for each requested attachment and confirm that it names the intended destination before reporting the upload complete. |
-| A clarification can be waiting when a worker restarts before its first external action. | Restart with the clarification queued. Verify that the first action follows the clarified request and that the clarification keeps its source message ID and stays pending until an answer addresses it. |
-| Browser guidance conflicted about reuse and profile selection. | Give the model one clear tool contract and keep tab ownership in the existing lifecycle. |
+| A user corrected the destination while a worker was preparing files. | Send the requester’s correction before the first upload. Verify each file at the corrected destination and each reply against its original message. A link from another participant must leave the destination intact. |
+| A worker restarted with a clarification waiting in its queue. | Reopen the worker before its first external action. Check that the action uses the clarified request and that the user receives an answer to it. |
+| Discord refused the first upload, yet recovery recorded it as possibly delivered. | After reopening the worker, distinguish a refused first upload, a partially delivered batch and an upload whose acknowledgment was lost. |
+| A project review combined a broad failing test run with a narrower successful rerun. | Report the platform, tests and components covered by each run. Keep failures outside the rerun visible, and identify any simulated service that limits the conclusion. |
+| A browser task read the desktop and extension manuals, then used only desktop control. | Choose the available route first. Load its instructions on demand and keep tab ownership with the tool that opened the tab. |
+| A correct first draft replaced its documented example with an invented workflow after a request for a stronger revision. | Compare the first revision with the original source. A clearer example still needs evidence that the product supports it. |
 | Some long delays contained very little tool-execution time. | Measure provider generation, preparation, queueing, compaction and tool time separately. |
 | Observer timing and prompt/oracle disagreement affected acceptance. | Qualify the measurement route first and preserve setup failures in the results. |
 | Successful local repairs did not establish an aggregate speed advantage. | Evaluate the user outcome, including waits, interventions and cleanup. |
 
 Implemented mechanisms are mapped in the [runtime source chapter](20-runtime-source-changes.md).
-The lessons below guide future choices; they introduce no new runtime component.
 
 ## Proposed next experiments
 
@@ -93,7 +89,7 @@ holds while response and completion times improve.
 Retain concise identity, preferences and source pointers. Retrieve relevant
 project facts when needed. Remove repeated instructions, stale procedure copies
 and model calls that only rediscover information already available in trusted
-context. Favor direct supported tool operations; use the existing browser session
+context. Favor direct supported tool operations. Use the existing browser session
 and lifecycle when visual interaction is needed.
 
 ### 4. Treat completion and cleanup as part of capability
@@ -114,18 +110,16 @@ flowchart LR
     Decide -->|No| Revert[Revert or defer]
 ```
 
-A proposed next experiment uses one candidate and six fresh representative tasks:
-a source lookup, a browser task, a reader-facing document, a code change, a
-correction during delegated work and a long-context continuation. Freeze tasks,
+A proposed next experiment compares one candidate on six tasks covering
+source lookup, browser use, a reader-facing document, a code change, a
+correction during delegated work and long-context continuation. Freeze tasks,
 scoring and budgets first. Compare completed work, first useful response,
 whole-task time, operator interventions and resource cleanup on comparable hosts.
 
 A practical decision target is at least 30% lower median completion time with
 preserved task quality and no critical privacy, wrong-account, duplicate-effect
 or lost-objective failure. Keep all attempts, including provider and infrastructure
-failures. If the candidate misses its target, revert or defer it rather than extend
-the sample until it passes. The experiment is a future proposal, not an active run
-or a result attributed to the current release.
+failures. Decide whether to adopt, revise or retire the candidate from that sample.
 
 The [verification guide](15-evidence-audit-and-verification.md) defines evidence
 boundaries. [Design decisions](18-architecture-evolution.md) explains the ownership

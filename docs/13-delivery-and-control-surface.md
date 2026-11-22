@@ -208,10 +208,15 @@ conversation to explain the outcome. Work resumes when the operator requests it.
 
 ## Ambiguous delivery
 
-Inspect the provider destination, native delivery owner and retained evidence before
-retrying an uncertain send. A stale transcript mirror or missing optional diagnostic
-record proves neither success nor failure. Keep account/thread bindings intact and
-retain an unknown outcome if the provider result cannot be established.
+Before retrying, identify the original request, the requester’s latest destination
+and the message or file that Discord actually received. Use the reply link and
+attachment details to distinguish two requests in the same conversation.
+
+| What happened during an upload | How to recover |
+| --- | --- |
+| Discord refused the first file and confirmed that every attempt failed. | Report the cause Discord returned. For a missing Attach Files permission, identify the affected destination so the requester can grant access or choose another route. |
+| One file arrived before a later file failed. | Read back the destination, identify the files already present and send only the missing files once the cause is resolved. |
+| The connection dropped after an upload started. | Reconcile the platform message or file receipt. Keep the send unresolved while its outcome is unknown. Another request can still receive its own answer. |
 
 ```mermaid
 flowchart LR
@@ -226,9 +231,8 @@ flowchart LR
     D -->|No| U[Retain unknown and inspect before retry]
 ```
 
-Internal deduplication reduces repeated sends; it is not an unconditional exactly-once
-promise across every provider failure. The [standalone diagram](../diagrams/delivery-path.mmd)
-shows the same verification boundary.
+A Discord readback establishes what the recipient can see.
+[Standalone delivery diagram](../diagrams/delivery-path.mmd)
 
 ## Acceptance through the real interface
 
