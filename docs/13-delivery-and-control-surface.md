@@ -122,6 +122,11 @@ voice provider/model, preferred voice and speaking instructions, wake names and
 room/guild overrides through the native schema. Text-channel admission alone does
 not enable voice; verify voice-state access and actual Connect/Speak permissions.
 
+Prepare the voice context before opening audio. If preparation fails, remember
+the rejected visit until the followed participant leaves or changes rooms.
+A repeated presence event or a periodic status check can describe the same
+visit. Treating either as a new arrival makes the bot join and leave repeatedly.
+
 Selected profile and policy context enters a new voice session at startup. The
 owner's permitted primary context and room context may both be supplied. Guests
 receive only their applicable context. Changing a file does not rewrite a running

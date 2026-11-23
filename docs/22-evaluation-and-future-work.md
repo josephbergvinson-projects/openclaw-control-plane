@@ -41,6 +41,28 @@ correction task took 492.2s to final delivery. Its correction arrived before the
 child finished, but the observer missed the exact native admission boundary, so
 strict live-correction timing remains unqualified.
 
+### An eight-task comparison through Discord
+
+A later comparison assigned the same eight tasks to two releases with the same
+model and reasoning effort. The earlier release recorded seven timing-qualified cases. Their
+median time to useful work was 85 seconds and their median to final delivery
+was 88 seconds.
+
+On the newer release, six of the eight requests ended with a generic error in
+Discord. The model produced answers, and the coding task also produced a
+verified file edit. The sender dropped the thread identifier when publishing
+the final. Two delegated answers reached Discord. One request differed from the
+frozen text, and the other missed the window for a correction while its parent
+was active. The original eight therefore yielded **zero qualified pairs for
+comparing final-delivery speed**. A fast error gives the user no useful answer.
+
+Both browser tasks reused the existing browser and restored the original tab.
+Those checks establish browser cleanup even though their final replies failed.
+The package regression test runs the compiled sender on an ordinary thread
+request and a message recovered after restart, checking the original reply
+reference and confirming that replaying the same incoming message ID produces
+no additional send.
+
 ## What we learned
 
 | Finding | Engineering lesson |
