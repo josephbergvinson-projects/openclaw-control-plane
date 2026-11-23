@@ -78,6 +78,8 @@ no additional send.
 | A project review combined a broad failing test run with a narrower successful rerun. | Report the platform, tests and components covered by each run. Keep failures outside the rerun visible, and identify any simulated service that limits the conclusion. |
 | A browser task read the desktop and extension manuals, then used only desktop control. | Choose the available route first. Load its instructions on demand and keep tab ownership with the tool that opened the tab. |
 | A correct first draft replaced its documented example with an invented workflow after a request for a stronger revision. | Compare the first revision with the original source. A clearer example still needs evidence that the product supports it. |
+| A request recovered after restart kept waiting after its agent's database was ready. | Measure that interval separately. Wake requests deferred for that database as soon as it is ready. Preserve the retry schedule for other failures. |
+| A background command finished, but a muted alert setting suppressed its requested result. | Deliver the result to the conversation that started the command. Keep routine alerts quiet and verify the requester received the output once. |
 | Some long delays contained very little tool-execution time. | Measure provider generation, preparation, queueing, compaction and tool time separately. |
 | Observer timing and prompt/oracle disagreement affected acceptance. | Qualify the measurement route first and preserve setup failures in the results. |
 | Successful local repairs did not establish an aggregate speed advantage. | Evaluate the user outcome, including waits, interventions and cleanup. |
