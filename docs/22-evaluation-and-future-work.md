@@ -140,6 +140,13 @@ correction during delegated work and long-context continuation. Freeze tasks,
 scoring and budgets first. Compare completed work, first useful response,
 whole-task time, operator interventions and resource cleanup on comparable hosts.
 
+For investigations, score the first answer the operator receives. Identify which
+authorized primary sources were reachable at the time and could have changed
+the conclusion or the operator's next step. Give credit for a useful partial
+answer that establishes what the evidence supports and explains a genuine gap.
+If a follow-up uncovers material evidence that was already reachable, record
+the omission, the extra prompt and the time to the corrected answer.
+
 A practical decision target is at least 30% lower median completion time with
 preserved task quality and no critical privacy, wrong-account, duplicate-effect
 or lost-objective failure. Keep all attempts, including provider and infrastructure
