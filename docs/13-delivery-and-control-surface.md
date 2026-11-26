@@ -102,6 +102,13 @@ or final ownership; configuration alone cannot repair a lost continuation owner.
 A legitimate yield is not an empty failed answer. Retain the original objective,
 child/result owner and requester return path, and resume when the child returns.
 
+In a 26 November field test on a release newer than the public R96 build, the
+parent resumed a private worker and its native acknowledgment edited the original
+Discord message. The receiver read the new count while the worker still waited
+for its final input. After that input arrived, one separate final appeared. In an
+earlier trial the same visible sequence required a manual Discord edit. The
+parent's tool trace showed which path made each edit.
+
 ## Company reply surfaces
 
 A registered read source can also be an approved reply surface. Registering the

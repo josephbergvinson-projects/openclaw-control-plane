@@ -41,18 +41,20 @@ boundaries, and the [calendar example](docs/07-worked-example.md) follows one ta
 
 ## What you can reproduce
 
-- **Runtime:** a complete patch from official OpenClaw **v2026.10.4**, regression
-  tests and the managed **Codex 0.160.0** native package.
+- **Runtime:** the **R96** gateway source from 13 November 2026, reconstructed
+  from official OpenClaw **v2026.10.4**, plus regression tests and the managed
+  **Codex 0.160.0** native package.
 - **Workspace:** operating instructions, source/account routing, release
   activation, maintenance and recovery helpers.
 - **Integration patterns:** configuration and fictional company examples for
   connecting your own services and devices.
 - **Operating workflow:** build, install, verify and recover a selected release.
 
-The [manifest](runtime/manifest.json) pins source, patches, toolchain and native
-artifacts. The optional Mac companion has its own source target; its local Bun
-security payload is outside this reconstruction package. See
-[source identities](runtime/README.md#source-identities) for the exact boundaries.
+The [manifest](runtime/manifest.json) pins the public build, including the source
+for Mac companion **508**. The delivery and evaluation guides also report field
+tests of later releases. To reproduce the public gateway or companion, use the
+corresponding [source target](runtime/README.md#source-identities). Supply the
+companion's local Bun security payload separately.
 For the October 2026 native releases, see the [download and reconstruction notes](docs/21-native-runtime-reconstruction.md#october-2026-native-releases).
 
 Company Alpha, Company Beta and the Personal Data Project are fictional. Example
