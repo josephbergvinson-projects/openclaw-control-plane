@@ -12,10 +12,11 @@ Earlier changes are summarized in the [history index](../docs/history/README.md)
 
 ## Current reference
 
-The reference uses official OpenClaw **v2026.10.4** and the managed
-**Codex 0.160.0** native package. The installed gateway reference is **R96**,
-activated on 13 November 2026. Mac companion build **508** retains its separately
-pinned source; the manifest supplies the delta from the newer distribution.
+The public reconstruction is frozen at gateway **R96**, released on 13 November
+2026. It uses official OpenClaw **v2026.10.4** and the managed **Codex 0.160.0**
+native package. Mac companion build **508** has a separate source target in the
+manifest. Later field tests in the guides identify the behavior observed on those
+releases. A clean checkout builds the targets pinned here.
 
 For a new installation, reconstruct and build the chosen target, install it through
 the release procedure, then verify a small task. The manifest pins reproducible
