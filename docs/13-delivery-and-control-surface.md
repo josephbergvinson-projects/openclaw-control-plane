@@ -255,5 +255,12 @@ conversation back and match the Stop acknowledgment and the answer to their
 respective requests. Check the order, wording and delivery once more through the
 live interface after the repair ships.
 
+For a delegated task, reply to its acknowledgment while the worker is active.
+Read the same message again after the parent receives a worker update. Its ID
+should match the original and its edited text should contain the requested
+finding. Record that observation before the separate final appears. When a
+retry carries two attachments, verify each displayed filename and the bytes
+available to the recipient.
+
 The [worked example](07-worked-example.md) demonstrates the user-facing contract;
 the [source map](20-runtime-source-changes.md) locates its runtime mechanisms.

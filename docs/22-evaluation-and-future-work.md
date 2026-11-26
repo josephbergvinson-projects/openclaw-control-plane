@@ -63,6 +63,26 @@ request and a message recovered after restart, checking the original reply
 reference and confirming that replaying the same incoming message ID produces
 no additional send.
 
+### Would more instructions improve first-pass judgment?
+
+A later test paired the existing workspace guidance with a 164-byte addition.
+Both configurations used the same model and reasoning effort through the running
+gateway. Each received 14 fresh tasks, one at a time. The evaluator checked
+which sources the assistant used, the first consequential decision, the final
+answer and the resulting files.
+
+Both configurations passed all 14 tasks without operator steering. For example,
+both corrected a draft after finding a narrower authorization, identified seven
+outstanding annex entries in a handoff, and recorded a failing profile-size check
+alongside a successful installation check. Both respected an explicit local edit
+and a deliberately global preference change. The existing instructions were kept.
+
+Median time to the terminal answer was 20.82 seconds with the existing guidance
+and 19.25 seconds with the addition. Each task ran once per configuration.
+The fixtures had small source sets. Accuracy across these pairs justified leaving
+the prompt alone. Broader search, long-running work and day-to-day speed still
+need direct observation in their own settings.
+
 ## What we learned
 
 | Finding | Engineering lesson |
