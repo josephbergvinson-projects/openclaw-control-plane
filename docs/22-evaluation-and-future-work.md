@@ -83,6 +83,24 @@ The fixtures had small source sets. Accuracy across these pairs justified leavin
 the prompt alone. Broader search, long-running work and day-to-day speed still
 need direct observation in their own settings.
 
+### How a resumed investigation lost scope
+
+In a field investigation, two workers returned and the assistant gave the
+operator three outstanding questions. With one more prompt, it traced all three
+using access it already had and identified where the records ended. The assistant
+had recorded that narrower scope in its own note before it yielded. A replay of the serving
+adapter showed that the note reached the model twice, once in the assistant’s
+tool call and again as a user message. The operator’s original request was
+still present. The replay established the attribution error. The conversation
+alone cannot tell us how much that error influenced the answer.
+
+This case adds two checks to an investigation review. Inspect who authored each
+instruction in the request sent to the model after a worker returns. Then compare
+the first answer with what the same agent could establish using its existing
+access. For a reference shared with a reader, check that they can open or copy
+the link and distinguish documented facts, configured behavior and examples of
+past activity.
+
 ## What we learned
 
 | Finding | Engineering lesson |
