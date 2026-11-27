@@ -187,6 +187,12 @@ answer that establishes what the evidence supports and explains a genuine gap.
 If a follow-up uncovers material evidence that was already reachable, record
 the omission, the extra prompt and the time to the corrected answer.
 
+Label a previously used request as a replay, even when it starts in a fresh
+chat. For an unseen task, keep the expected answer outside the agent's
+searchable sources. Check the tool trace for the records that support the
+answer. If the agent encountered the scoring notes or a previous solution,
+record that exposure and use a different case to measure independent judgment.
+
 A practical decision target is at least 30% lower median completion time with
 preserved task quality and no critical privacy, wrong-account, duplicate-effect
 or lost-objective failure. Keep all attempts, including provider and infrastructure
