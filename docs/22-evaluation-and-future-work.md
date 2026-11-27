@@ -107,6 +107,8 @@ past activity.
 | --- | --- |
 | The production tool interface differed from the interface used in a motivating benchmark. | Trace the actual deployed call path before changing an interface. |
 | Split-turn compaction summarized the same prefix twice. | Remove duplicated work at its existing owner before adding a new memory layer. |
+| A worker report became the operator’s latest request during compaction. | Keep the report as evidence and take the requested action from the operator’s own message. Check both against the conversation before summarization. |
+| Progress marked for display only reached the model after the session reopened. | Send two ordinary requests across a real session close and reopen. Inspect the model input on each request and verify the operator can still see the progress entry. |
 | A confirmed answer lost its delivery record when the system copied its conversation history. | Carry the platform message ID into the copy so recovery can verify what the recipient received. |
 | Two requests in one conversation can both await a reply when a worker restarts. | Test both recovery orders. Check that each confirmed reply appears once on its original request. Record an unconfirmed send against its original request while the other request finishes. Retry only after confirming that the first attempt was unsent. |
 | A platform can return a message ID for a text fallback after an upload fails. | Check the platform’s file receipt for each requested attachment and confirm that it names the intended destination before reporting the upload complete. |
