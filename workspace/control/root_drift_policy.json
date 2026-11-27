@@ -46,6 +46,7 @@
       "paths": [
         "AGENTS.md",
         "runbook/tools-reference.md",
+        "runbook/heartbeat-scratch.md",
         "SOUL.md",
         "WRITING.md",
         "USER.md",

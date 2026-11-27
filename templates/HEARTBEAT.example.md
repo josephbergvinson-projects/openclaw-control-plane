@@ -1,6 +1,6 @@
-# HEARTBEAT.md — Periodic attention checks
+# Heartbeat monitoring instructions
 
-Use this file only when the installed runtime is configured to run a heartbeat that reads it. Copying this file does not create a schedule. It is non-authoritative and does not replace `AGENTS.md`, the native scheduler, a running task or a provider's current state.
+The installer puts this example in `runbook/heartbeat-scratch.md`. To use it, save the applicable instructions as scratch on the intended monitoring job. The job owns its schedule and delivery settings. [Heartbeat documentation](https://docs.openclaw.ai/gateway/heartbeat)
 
 Read the configured attention sources using the permitted bounded read paths. Report a material change, failure, decision or requested reminder in natural prose. A no-change success stays silent unless the schedule explicitly promises a report. Do not repeat unchanged alerts or treat stale evidence as proof of failure.
 

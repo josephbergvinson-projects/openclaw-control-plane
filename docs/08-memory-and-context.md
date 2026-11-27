@@ -49,6 +49,8 @@ The pinned source's `WORKSPACE_BOOTSTRAP_FILENAMES` in `src/agents/workspace-boo
 
 `runbook/tools-reference.md`, `WRITING.md` and `WORKER.md` are outside that recognized list. The tool execution reference is opened deliberately when AGENTS routes a task to it. WRITING is opened for applicable long-form prose. WORKER, if retained, is a legacy generated reference. Extra-file configuration is not a universal bypass of accepted bootstrap basenames.
 
+In an ordinary chat, OpenClaw includes the eligible `USER.md` in the first model input under a separate 4,000-character cap. Local tool conventions belong under `## Tools` in `AGENTS.md`. The capability resolver reads its registry on demand. Heartbeat instructions live in the monitoring job’s scratch. [Workspace files](https://docs.openclaw.ai/concepts/agent-workspace) · [User model](https://docs.openclaw.ai/concepts/user-model) · [Heartbeat](https://docs.openclaw.ai/gateway/heartbeat)
+
 The `filterBootstrapFilesForSession` implementation applies two separate decisions: privacy filtering and the session-specific filename allowlist.
 
 | Session classification | Relevant behavior |
