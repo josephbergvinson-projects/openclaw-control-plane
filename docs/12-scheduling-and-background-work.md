@@ -128,6 +128,12 @@ Interpret three facts separately:
 2. **Effect:** an independent readback establishes the expected result for that target and period.
 3. **Delivery:** the configured destination accepted the intended user-visible result.
 
+To verify a scheduled report, compare the saved summary with the messages the
+bot posted at its destination around that occurrence. Include posts without a
+run link when counting matches. Check authored links and any text added by the
+sender. This catches both a duplicate lacking a tracking link and an unwanted
+footer on an otherwise correct report.
+
 A wrapper propagates child errors and treats missing or malformed required output as unknown. A job whose contract permits silence may succeed without a message; a required report with no delivery remains incomplete. Use each job's declared result contract instead of a universal rule that all empty output is success or failure.
 
 An unchanged trigger can finish successfully without dispatching a payload or
@@ -197,6 +203,13 @@ Independence is specific. A helper can avoid the model while still depending on 
 Detection and repair are separate choices. A read-only receipt guard checks the effect. An explicitly configured remediation path may take a bounded action when its own admission checks pass. Never turn a failed observation into an unrestricted retry loop.
 
 ## Interruptions and concurrent work
+
+Wall time determines when a job is due. A monotonic clock measures how long it
+runs. Exercise the runner with the wall clock ahead and behind and check the
+duration in both the returned result and the recorded event. For a persisted
+pending reply, compare an idle session with a session that still has an active
+writer. A timestamp far in the future can otherwise leave the idle session
+reporting that work is in flight for hours.
 
 A timer may fire while another task is building, retaining files or changing a runtime release. Re-check required ownership and quiescence at the consequential step. Protect live worktrees, selected releases, rollback dependencies and active command processes.
 
