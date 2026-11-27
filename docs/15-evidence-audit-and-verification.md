@@ -59,4 +59,6 @@ A reviewer should inspect source and destination evidence rather than accept the
 
 For a private archive, check captured scope, consistency, credential handling and restoration. A manifest listing files is not proof that their contents are present or decryptable. A backup tool exiting successfully is not a full restore test.
 
+A running assistant can use a preference or project reference that its recovery source lacks. After changing durable context, restore the affected files into an empty directory from the published revision. Follow the references that the assistant needs for the task. If a workspace generates team-specific files, regenerate them there and compare them with the installed copies. This check can catch a regression before the next restore.
+
 The [adoption guide](17-adoption-guide.md) turns these principles into an installation sequence. The [capability matrix](03-capability-provenance.md) prevents the resulting evidence from being generalized beyond its scope.
