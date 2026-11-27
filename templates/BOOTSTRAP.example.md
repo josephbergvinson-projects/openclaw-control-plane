@@ -1,6 +1,6 @@
-# BOOTSTRAP.md — Load-policy reference
+# BOOTSTRAP.md — First-run setup
 
-This file describes intended use and sensitivity. It is not a loader configuration and creates no behavioral authority. `AGENTS.md` owns behavior. The actual runtime filename list, session classification, privacy filter and context budgets determine what reaches a model turn.
+During onboarding, establish the assistant’s identity with the operator and record their initial preferences. OpenClaw uses this file while setup is pending. Once setup is complete, ongoing guidance belongs in `AGENTS.md`.
 
 ## Files and roles
 
@@ -11,12 +11,12 @@ This file describes intended use and sensitivity. It is not a loader configurati
 | `USER.md` | Durable working preferences | Recognized when present; not in the native `subagent:` allowlist |
 | `IDENTITY.md` | Concise assistant identity | Recognized; not in the native `subagent:` allowlist |
 | `MEMORY.md` | Compact cues and pointers | Recognized when present; root memory is removed for native subagents, cron, groups and channels |
-| `BOOTSTRAP.md` | Setup/load reference | Recognized, subject to setup and continuation handling; absent from cron/subagent allowlists |
+| `BOOTSTRAP.md` | First-run setup | Recognized, subject to setup and continuation handling; absent from cron/subagent allowlists |
 | `runbook/tools-reference.md` | Deliberate-read mechanics | Not in the recognized bootstrap filename list; read the relevant sections when AGENTS routes there |
 | `WRITING.md` | Long-form style child of SOUL | Not in the recognized list; deliberately read for applicable prose |
 | `WORKER.md` | Legacy generated reference, if retained | Not recognized; does not replace AGENTS in a worker |
 | `policy_manifest.json`, `policy_bootstrap_manifest.json` | Advisory metadata | Not runtime loader inputs |
-| `capabilities.md`, `INDEX.md`, `HEARTBEAT.md` | Optional derived/reference files | Not recognized by the standard workspace bootstrap list; use only an explicitly configured reader |
+| `capabilities.md`, `INDEX.md` | Optional derived/reference files | Not recognized by the standard workspace bootstrap list; use only an explicitly configured reader |
 
 The pinned source implements these rules in `src/agents/workspace-bootstrap-policy.ts` (`WORKSPACE_BOOTSTRAP_FILENAMES`) and `src/agents/workspace.ts` (`filterBootstrapFilesForSession`). A visible dashboard worker is not automatically a native `subagent:` session: its session and chat classification determine filtering. Do not infer injected contents from a UI label or a manifest role name.
 

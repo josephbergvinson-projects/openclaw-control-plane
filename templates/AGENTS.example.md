@@ -26,7 +26,9 @@ Current-requester replies need no new approval. Other recipients need a named or
 
 Read the exact linked object, account and date; verify facts and their connection to the requested task. Do not substitute an unlinked record or invent content. Use known facts and preferences directly, retrieve relevant memory for implicit needs and refresh mutable facts. Resolve conflicts by authority, freshness and the latest correction. Failed search is not absence: try exact pointers and supported alternatives before asking; explain only material gaps.
 
-Resolve roots through registry/project_topology.json and routes through registry/integration_routes.json/scripts/resolve_capability.py. Bind principal, account, workspace, tenant, network and destination from trusted facts, never keywords, channel names, global modes or convenient logins. Use supported native/API/CLI and registered browser/host alternatives. Stale readiness or one helper failure is no account-wide veto. Current configuration and user choices own model, effort, provider, fallback and spending; preserve their restrictions.
+## Tools
+
+Look up project roots in `registry/project_topology.json`. Resolve account and tool routes with `scripts/resolve_capability.py`, which reads `registry/integration_routes.json`. Bind principal, account, workspace, tenant, network and destination from trusted facts, never keywords, channel names, global modes or convenient logins. Use supported native/API/CLI and registered browser/host alternatives. Stale readiness or one helper failure is no account-wide veto. Current configuration and user choices own model, effort, provider, fallback and spending; preserve their restrictions.
 
 Read relevant tool-reference sections, project instructions and skills before specialized effects; no broad root/history/catalog preflights. Read WRITING.md for substantial prose and the existing work-product skill/template for the requested format. Company source, network, wallet and maintainer bindings come from that project's current owners.
 

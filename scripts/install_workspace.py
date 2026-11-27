@@ -53,6 +53,8 @@ def collect_files() -> dict[Path, tuple[bytes, int]]:
     for source in source_files(ROOT / "templates"):
         if source.name == "TOOLS.example.md":
             add(Path("runbook/tools-reference.md"), source)
+        elif source.name == "HEARTBEAT.example.md":
+            add(Path("runbook/heartbeat-scratch.md"), source)
         elif ".example." in source.name:
             add(Path(source.name.replace(".example.", ".", 1)), source)
         elif source.name == "analytical-workbook.md":

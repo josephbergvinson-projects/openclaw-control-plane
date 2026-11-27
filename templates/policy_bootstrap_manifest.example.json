@@ -150,7 +150,7 @@
       "recognized_by_workspace_loader": false
     },
     {
-      "path": "HEARTBEAT.md",
+      "path": "runbook/heartbeat-scratch.md",
       "contract_role": "advisory",
       "bootstrap_default": "never",
       "injected_for_roles": [],
@@ -158,7 +158,7 @@
       "owner_file": "AGENTS.md",
       "recognized_by_workspace_loader": false,
       "reference_only": true,
-      "notes": "Optional reference template; absent from the source Workspace. Requires an explicitly configured reader; copying does not schedule work."
+      "notes": "Example for native monitoring-job scratch. The operator selects the job, schedule and delivery settings."
     }
   ],
   "public_adaptation": "Private-context file inventories are omitted. Non-private contract roles, bootstrap intent, accounting profiles, sensitivity and ownership preserve the source schema. Optional reference-only entries are labeled explicitly."

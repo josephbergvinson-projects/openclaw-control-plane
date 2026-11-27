@@ -87,6 +87,9 @@ class WorkspaceInstallTests(unittest.TestCase):
         self.assertEqual("runbook/tools-reference.md", mechanics["path"])
         self.assertEqual("never", mechanics["bootstrap_default"])
         self.assertFalse(mechanics["recognized_by_workspace_loader"])
+        self.assertIn("## Tools", files[Path("AGENTS.md")][0].decode())
+        self.assertTrue((self.destination / "runbook/heartbeat-scratch.md").is_file())
+        self.assertNotIn(Path("HEARTBEAT.md"), files)
 
     def test_canonical_tools_installation_preserves_operator_path_bindings(self):
         operator = self.root / "operator.json"
