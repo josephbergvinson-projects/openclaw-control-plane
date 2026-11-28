@@ -1,6 +1,6 @@
 # Analytical workbook contract
 
-The tab layout for any workbook that accompanies an operator-facing work product. Copy this structure; do not add tabs.
+Use this layout for a new standalone analytical model when the request leaves the structure open. An established workbook keeps the layout its readers and tools use.
 
 A workbook is a model someone changes an input in and watches the answer move. It is not a place to store what you found.
 
