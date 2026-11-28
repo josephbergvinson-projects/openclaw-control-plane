@@ -44,13 +44,10 @@ The exception is narrow and literal: the deliverable's own subject is the contro
 
 Also never: a section describing the process that produced the document, a revision history, a confidence annotation on every paragraph, or a list of what was considered and rejected.
 
-## Workbooks
+## New analytical workbooks
 
-Tab order is fixed, left to right, seven maximum:
+Use `templates/analytical-workbook.md` for a new standalone analysis when the requested structure is open. An established workflow supplies its own template and input format.
 
-`Summary` → `Inputs` → `Model` → `Scenarios` → `Outputs` → `Data` → `Sources`
-
-- Copy `templates/analytical-workbook.md` for the full tab contract.
 - `Coverage`, `Claims`, `Requirements`, `Evidence`, `QA`, `Register`, `Provenance` tabs do not appear in a deliverable workbook. Separate file.
 - No hardcoded number inside a formula. Every literal lives on `Inputs`.
 - `Summary` opens on the recommendation as a full sentence, then the three numbers it depends on.
